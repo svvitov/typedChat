@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'scala'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+application {
+    mainClass = 'Launcher'
+}
+def versions = [
+        ScalaBinary: "2.13"
+]
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    implementation 'org.scala-lang:scala-library:2.11.12'
+    implementation platform("com.typesafe.akka:akka-bom_${versions.ScalaBinary}:2.6.16")
+
+    implementation "com.typesafe.akka:akka-actor-typed_${versions.ScalaBinary}"
+    implementation "com.typesafe.akka:akka-cluster-typed_${versions.ScalaBinary}"
+    implementation "com.typesafe.akka:akka-serialization-jackson_${versions.ScalaBinary}"
+}
+
+test {
+    useJUnitPlatform()
+}
