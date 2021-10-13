@@ -30,10 +30,10 @@ class ChatControllerImpl extends ChatController{
       messageInput.clear()
     }
 
-
   }
 
   def start(ip: String, port: String): Unit = {
+    println(ip)
     println(port)
     if (!port.equals("")) {
       val config = ConfigFactory.parseString(s"""
