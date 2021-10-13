@@ -33,11 +33,11 @@ class ChatControllerImpl extends ChatController{
 
   }
 
-  def start(port: String): Unit = {
+  def start(ip: String, port: String): Unit = {
     if (!port.equals("")) {
       val config = ConfigFactory.parseString(s"""
             akka.remote.artery.canonical.port=$port
-            akka.cluster.seed-nodes = ["akka://ClusterSystem@localhost:2551", "akka://ClusterSystem@localhost:$port"]
+            akka.cluster.seed-nodes = ["akka://ClusterSystem@localhost:2551", "akka://ClusterSystem@$ip:$port"]
             """).withFallback(ConfigFactory.load())
       this.system = ActorSystem(Main(this), "ClusterSystem", config)
       val cluster = Cluster(this.system)

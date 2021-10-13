@@ -21,6 +21,6 @@
             </font>
         </Button>
       <TextField fx:id="port" layoutX="141.0" layoutY="293.0" prefHeight="31.0" prefWidth="220.0" promptText="port" text="2551" />
-      <TextField fx:id="host" layoutX="141.0" layoutY="252.0" prefHeight="31.0" prefWidth="220.0" promptText="host" />
+      <TextField fx:id="ip" layoutX="141.0" layoutY="252.0" prefHeight="31.0" prefWidth="220.0" promptText="ip" />
     </children>
 </AnchorPane>
