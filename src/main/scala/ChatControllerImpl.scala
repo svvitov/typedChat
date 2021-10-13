@@ -1,4 +1,4 @@
-import User.{MySerializable, PrivateMessage, PublicMessage}
+import User.{MySerializable, PrivateMessage, PublicMessage, WhatsYourName}
 import akka.actor.typed.ActorSystem
 import akka.cluster.typed.Cluster
 import com.typesafe.config.ConfigFactory
@@ -31,7 +31,6 @@ class ChatControllerImpl extends ChatController{
   }
 
   def start(port: String): Unit = {
-
     if (!port.equals("")) {
       val config = ConfigFactory.parseString(s"""
             akka.remote.artery.canonical.port=$port
@@ -40,9 +39,15 @@ class ChatControllerImpl extends ChatController{
       this.system = ActorSystem(Main(this), "ClusterSystem", config)
       val cluster = Cluster(this.system)
       messagesField.appendText(s"Вы онлайн как: $login\nЧтобы отправить приватное сообщение используйте команду:\n/private;NicknameПолучателя;Текст сообщения\n\n")
+      getOnline
     }
   }
 
+  private def getOnline {
+    Thread.sleep(3000)
+    this.system ! WhatsYourName()
+
+  }
 
   override def onExitButton(event: ActionEvent): Unit = {
     this.system.terminate()

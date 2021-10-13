@@ -1,5 +1,5 @@
-import User.MySerializable
-import akka.actor.typed.Behavior
+import User.{MySerializable}
+import akka.actor.typed.{Behavior}
 import akka.actor.typed.pubsub.Topic
 import akka.actor.typed.scaladsl.{AbstractBehavior, ActorContext, Behaviors}
 
@@ -12,7 +12,7 @@ object Main{
     topic ! Topic.Subscribe(actor)
 
     Behaviors.receiveMessage{
-      case msg: MySerializable => topic ! Topic.Publish(msg)
+      case msg => topic ! Topic.Publish(msg)
         Behaviors.same
     }
   })
@@ -23,6 +23,9 @@ object Main{
     trait MySerializable
     final case class PublicMessage(from: String, text: String) extends MySerializable
     final case class PrivateMessage(from: String, to: String, text: String) extends MySerializable
+    final case class WhatsYourName() extends MySerializable
+    final case class MyName(nickname: String) extends MySerializable
+
 
     def apply(chatControllerImpl: ChatControllerImpl): Behavior[MySerializable] = createActor(chatControllerImpl)
 
@@ -37,8 +40,13 @@ object Main{
           case PublicMessage(from, text) => chatControllerImpl.messagesField.appendText(s"[$from]: $text\n")
             this
           case PrivateMessage(from, to, text) => if (from.equals(chatControllerImpl.login) | to.equals(chatControllerImpl.login))
-            chatControllerImpl.messagesField.appendText(s"[Private] [$from]: $text")
+            chatControllerImpl.messagesField.appendText(s"[Private] [$from --> $to]: $text\n")
             this
+          case WhatsYourName() => chatControllerImpl.system ! MyName(chatControllerImpl.login)
+            this
+          case MyName(nickname) => if(!chatControllerImpl.onlineUsers.getText.contains(nickname)) chatControllerImpl.onlineUsers.appendText(s"\n$nickname")
+            this
+          case _ => this
         }
       }
     }

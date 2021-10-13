@@ -14,6 +14,9 @@ public class ChatController{
     protected TextArea messagesField;
 
     @FXML
+    protected TextArea onlineUsers;
+
+    @FXML
     protected TextField messageInput;
 
     @FXML

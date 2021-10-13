@@ -13,6 +13,9 @@ public class LoginController {
     protected TextField nicknameTextField;
 
     @FXML
+    private TextField host;
+
+    @FXML
     protected TextField port;
 
     @FXML
