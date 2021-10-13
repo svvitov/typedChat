@@ -5,8 +5,9 @@ import com.typesafe.config.ConfigFactory
 import javafx.application.Platform
 import javafx.event.ActionEvent
 
-import java.net.URL
+import java.net.{NetworkInterface, URL}
 import java.util.ResourceBundle
+import scala.collection.convert.ImplicitConversions.`enumeration AsScalaIterator`
 
 class ChatControllerImpl extends ChatController{
 
@@ -33,11 +34,16 @@ class ChatControllerImpl extends ChatController{
 
   }
 
-  def start(ip: String, port: String): Unit = {
+  def start(host: String, port: String): Unit = {
+    val interfaces = NetworkInterface.getNetworkInterfaces
+    val inetAddresses = interfaces.flatMap(interface => interface.getInetAddresses)
+    val ip = inetAddresses.find(_.isSiteLocalAddress).map(_.getHostAddress).get
+
     if (!port.equals("")) {
       val config = ConfigFactory.parseString(s"""
+            akka.remote.artery.canonical.hostname=$ip
             akka.remote.artery.canonical.port=$port
-            akka.cluster.seed-nodes = ["akka://ClusterSystem@localhost:2551", "akka://ClusterSystem@$ip:$port"]
+            akka.cluster.seed-nodes = ["akka://ClusterSystem@$ip:2551", "akka://ClusterSystem@$host:$port"]
             """).withFallback(ConfigFactory.load())
       this.system = ActorSystem(Main(this), "ClusterSystem", config)
       val cluster = Cluster(this.system)
