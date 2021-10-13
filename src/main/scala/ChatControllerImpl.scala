@@ -1,13 +1,12 @@
-import User.{MySerializable, PrivateMessage, PublicMessage, WhatsYourName}
+import User.{Bye, MySerializable, PrivateMessage, PublicMessage, WhatsYourName}
 import akka.actor.typed.ActorSystem
 import akka.cluster.typed.Cluster
 import com.typesafe.config.ConfigFactory
 import javafx.application.Platform
 import javafx.event.ActionEvent
 
-import java.net.{NetworkInterface, URL}
+import java.net.URL
 import java.util.ResourceBundle
-import scala.collection.convert.ImplicitConversions.`enumeration AsScalaIterator`
 
 class ChatControllerImpl extends ChatController{
 
@@ -34,14 +33,12 @@ class ChatControllerImpl extends ChatController{
 
   }
 
-  def start(host: String, port: String): Unit = {
-
+  def start(ip: String, port: String): Unit = {
+    println(port)
     if (!port.equals("")) {
       val config = ConfigFactory.parseString(s"""
-            akka.actor.provider="cluster"
-            akka.remote.artery.canonical.hostname=$host
             akka.remote.artery.canonical.port=$port
-            akka.cluster.seed-nodes = ["akka://ClusterSystem@$host:2551", "akka://ClusterSystem@$host:$port"]
+            akka.cluster.seed-nodes = ["akka://ClusterSystem@localhost:2551", "akka://ClusterSystem@$ip:$port"]
             """).withFallback(ConfigFactory.load())
       this.system = ActorSystem(Main(this), "ClusterSystem", config)
       val cluster = Cluster(this.system)
@@ -57,6 +54,8 @@ class ChatControllerImpl extends ChatController{
   }
 
   override def onExitButton(event: ActionEvent): Unit = {
+    val nickname = login // создаю val на основе var login, чтобы не отправлять var
+    this.system ! Bye(nickname)
     this.system.terminate()
     Platform.exit()
     System.exit(0)

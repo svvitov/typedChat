@@ -13,7 +13,7 @@ public class LoginController {
     protected TextField nicknameTextField;
 
     @FXML
-    protected TextField host;
+    protected TextField ip;
 
     @FXML
     protected TextField port;

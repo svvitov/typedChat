@@ -25,7 +25,7 @@ object Main{
     final case class PrivateMessage(from: String, to: String, text: String) extends MySerializable
     final case class WhatsYourName() extends MySerializable
     final case class MyName(nickname: String) extends MySerializable
-
+    final case class Bye(nickname: String) extends MySerializable
 
     def apply(chatControllerImpl: ChatControllerImpl): Behavior[MySerializable] = createActor(chatControllerImpl)
 
@@ -35,6 +35,9 @@ object Main{
 
 
     class UserBehavior(context: ActorContext[MySerializable], chatControllerImpl: ChatControllerImpl) extends AbstractBehavior[MySerializable](context) {
+
+      val nickname = chatControllerImpl.login // создаю val на основе var login, чтобы не отправлять var
+
       override def onMessage(msg: MySerializable): Behavior[MySerializable] = {
         msg match {
           case PublicMessage(from, text) => chatControllerImpl.messagesField.appendText(s"[$from]: $text\n")
@@ -42,10 +45,12 @@ object Main{
           case PrivateMessage(from, to, text) => if (from.equals(chatControllerImpl.login) | to.equals(chatControllerImpl.login))
             chatControllerImpl.messagesField.appendText(s"[Private] [$from --> $to]: $text\n")
             this
-          case WhatsYourName() => chatControllerImpl.system ! MyName(chatControllerImpl.login)
+          case WhatsYourName() => chatControllerImpl.system ! MyName(nickname)
             this
           case MyName(nickname) => if(!chatControllerImpl.onlineUsers.getText.contains(nickname)) chatControllerImpl.onlineUsers.appendText(s"\n$nickname")
             this
+          case Bye(nickname) => chatControllerImpl.onlineUsers.setText(chatControllerImpl.onlineUsers.getText.replace(s"\n${nickname}", "").trim)
+          this
           case _ => this
         }
       }
