@@ -8,7 +8,7 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ChatController{
+public class ChatController implements Initializable {
 
     @FXML
     protected TextArea messagesField;
@@ -32,6 +32,11 @@ public class ChatController{
 
     @FXML
     void onSendMessageButton(ActionEvent event) {
+
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
 
     }
 }

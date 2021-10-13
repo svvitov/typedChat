@@ -11,6 +11,6 @@
         <TextField fx:id="messageInput" layoutX="65.0" layoutY="515.0" prefHeight="28.0" prefWidth="556.0" promptText="Enter your text..." />
         <Button fx:id="sendMessageButton" defaultButton="true" layoutX="635.0" layoutY="515.0" mnemonicParsing="false" onAction="#onSendMessageButton" prefHeight="28.0" prefWidth="80.0" style="-fx-cursor: hand;" text="Send" />
         <Button fx:id="exitButton" cancelButton="true" layoutX="723.0" layoutY="516.0" mnemonicParsing="false" onAction="#onExitButton" prefHeight="25.0" prefWidth="139.0" text="Exit" />
-      <TextArea fx:id="onlineUsers" editable="false" layoutX="723.0" layoutY="7.0" prefHeight="501.0" prefWidth="139.0" text="users online:" />
+      <TextArea fx:id="onlineUsers" editable="false" layoutX="723.0" layoutY="7.0" prefHeight="501.0" prefWidth="139.0" text="online:" />
     </children>
 </AnchorPane>

@@ -5,6 +5,9 @@ import com.typesafe.config.ConfigFactory
 import javafx.application.Platform
 import javafx.event.ActionEvent
 
+import java.net.URL
+import java.util.ResourceBundle
+
 class ChatControllerImpl extends ChatController{
 
   var login: String = _ // var, потому что сюда передается login из окна входа
@@ -43,10 +46,10 @@ class ChatControllerImpl extends ChatController{
     }
   }
 
+
   private def getOnline {
     Thread.sleep(3000)
     this.system ! WhatsYourName()
-
   }
 
   override def onExitButton(event: ActionEvent): Unit = {
@@ -54,5 +57,6 @@ class ChatControllerImpl extends ChatController{
     Platform.exit()
     System.exit(0)
   }
+
 
 }
