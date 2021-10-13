@@ -34,10 +34,10 @@ object Main{
     class UserBehavior(context: ActorContext[MySerializable], chatControllerImpl: ChatControllerImpl) extends AbstractBehavior[MySerializable](context) {
       override def onMessage(msg: MySerializable): Behavior[MySerializable] = {
         msg match {
-          case PublicMessage(from, text) => chatControllerImpl.messagesField.appendText(s"$from: $text\n")
+          case PublicMessage(from, text) => chatControllerImpl.messagesField.appendText(s"[$from]: $text\n")
             this
           case PrivateMessage(from, to, text) => if (from.equals(chatControllerImpl.login) | to.equals(chatControllerImpl.login))
-            chatControllerImpl.messagesField.appendText(s"[Private] $from: $text")
+            chatControllerImpl.messagesField.appendText(s"[Private] [$from]: $text")
             this
         }
       }
