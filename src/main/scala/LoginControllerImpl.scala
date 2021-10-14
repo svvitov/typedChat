@@ -14,11 +14,9 @@ class LoginControllerImpl extends LoginController {
       val controller = getRootController[ChatControllerImpl]("views/ChatWindow.fxml")
       val stage = new Stage()
 
-      val localhost: InetAddress = InetAddress.getLocalHost
-      val localIpAddress: String = localhost.getHostAddress
 
       controller._2.login = nicknameTextField.getText.trim
-      controller._2.start(if(host.getText.isEmpty)  localIpAddress else host.getText, port.getText, if(connectTo.getText.isEmpty) localIpAddress else connectTo.getText)
+      controller._2.start(if(host.getText.isEmpty)  "localhost" else host.getText, port.getText, if(connectTo.getText.isEmpty) "localhost" else connectTo.getText)
       stage.setScene(new Scene(controller._1))
       stage.setTitle("Chat")
       stage.setResizable(false)
