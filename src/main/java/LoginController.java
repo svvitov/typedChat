@@ -16,6 +16,9 @@ public class LoginController {
     protected TextField host;
 
     @FXML
+    protected TextField connectTo;
+
+    @FXML
     protected TextField port;
 
     @FXML
